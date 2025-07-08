@@ -54,8 +54,15 @@ client.on('messageCreate', async (msg) => {
 
     console.log('→ POST a n8n status:', res.status);
 
-    const reply = await res.text();
-    if (reply.trim()) await msg.channel.send(reply);
+    // n8n ahora devuelve JSON: { output: "...", threadId: "..." }
+    const data = await res.json();
+    console.log('Respuesta de n8n:', data);
+
+    if (data.output?.trim()) {
+      await msg.channel.send(data.output);
+      // (opcional) guarda el threadId para continuaciones
+      threadsByChannel.set(msg.channel.id, data.threadId);
+}
   } catch (err) {
     console.error('💥 Error al llamar a n8n →', err);
   }
