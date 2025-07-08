@@ -27,7 +27,9 @@ client.once('ready', () => {
 
 client.on('messageCreate', async (msg) => {
   // Solo canal #general, ignora bots
-  if (msg.channel.name !== 'general' || msg.author.bot) return;
+  // Responder SOLO a canales-ticket y SOLO a humanos
+  const TICKET_REGEX = /^(ticket|reseñas|soporte|pago)-\d+$/i;
+  if (!TICKET_REGEX.test(m.channel.name) || m.author.bot) return;
 
   try {
     const res = await fetch(N8N_WEBHOOK_URL, {
