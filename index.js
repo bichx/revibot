@@ -26,10 +26,15 @@ client.once('ready', () => {
 });
 
 client.on('messageCreate', async (msg) => {
-  // Solo canal #general, ignora bots
-  // Responder SOLO a canales-ticket y SOLO a humanos
+  // Patrón de canales-ticket
   const TICKET_REGEX = /^(ticket|reseñas|soporte|pago)-\d+$/i;
-  if (!TICKET_REGEX.test(m.channel.name) || m.author.bot) return;
+  if (!TICKET_REGEX.test(msg.channel.name) || msg.author.bot) return;
+
+  console.log('↘ Mensaje recibido:', {
+    channel: msg.channel.name,
+    content: msg.content,
+    author:  `${msg.author.username}#${msg.author.discriminator}`
+  });
 
   try {
     const res = await fetch(N8N_WEBHOOK_URL, {
@@ -47,11 +52,14 @@ client.on('messageCreate', async (msg) => {
       })
     });
 
-    const reply = await res.text();         // n8n devuelve texto plano
+    console.log('→ POST a n8n status:', res.status);
+
+    const reply = await res.text();
     if (reply.trim()) await msg.channel.send(reply);
   } catch (err) {
     console.error('💥 Error al llamar a n8n →', err);
   }
 });
+
 
 client.login(DISCORD_TOKEN);
