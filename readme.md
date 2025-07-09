@@ -1,6 +1,6 @@
 # Discord ↔︎ n8n Bridge
 
-Puente ligero en Node.js que escucha el canal **#general** de tu servidor
+Puente ligero en Node.js que escucha todo tu servidor
 de Discord y envía cada mensaje a un Webhook de n8n Cloud; la respuesta
 (devuelta por GPT a través de n8n) se publica en el mismo canal.
 
